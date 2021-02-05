@@ -1,0 +1,21 @@
+type Report {
+    id: ID!
+    createdAt: Time!
+    updatedAt: Time!
+    orderList: [Order]
+}
+
+type Order {
+    id: ID!
+    item: String!
+    user: String!
+    quantity: Int!
+    city: String!
+    department: String!
+    price: Int!
+}
+
+type Query {
+    Order(id: ID!) : Order
+    Report(id: ID!) : Report
+}
