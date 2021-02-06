@@ -6,7 +6,7 @@ package graph
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"strconv"
 	"time"
 
 	parserservice "github.com/fracartdev/testing/app/parser"
@@ -15,12 +15,22 @@ import (
 )
 
 func (r *queryResolver) Order(ctx context.Context, id string) (*model.Order, error) {
-	var order *model.Order
-	var report *[]model.Order
+	var order []*model.Order
 	encJSON := parserservice.Parse()
-	err := json.Unmarshal(encJSON, &report)
-	fmt.Println(report)
-	return order, err
+
+	err := json.Unmarshal(encJSON, &order)
+
+	idINT, _ := strconv.Atoi(id)
+
+	return &model.Order{
+		ID:         order[idINT].ID,
+		Item:       order[idINT].Item,
+		User:       order[idINT].User,
+		Quantity:   order[idINT].Quantity,
+		City:       order[idINT].City,
+		Department: order[idINT].Department,
+		Price:      order[idINT].Price,
+	}, err
 }
 
 func (r *queryResolver) Report(ctx context.Context, id string) (*model.Report, error) {
