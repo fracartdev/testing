@@ -1,4 +1,4 @@
-package parser
+package parserservice
 
 import (
 	"encoding/csv"
@@ -10,17 +10,17 @@ import (
 
 // Order definisce la struttura per il JSON
 type Order struct {
-	ID         int    `json:"id"`
+	ID         string `json:"id"`
 	Item       string `json:"item"`
 	User       string `json:"user"`
-	Qty        int    `json:"quantity"`
+	Quantity   int    `json:"quantity"`
 	City       string `json:"city"`
 	Department string `json:"department"`
 	Price      int    `json:"price"`
 }
 
-func readCSV(file string) [][]string {
-	csvFile, err := os.Open(file)
+func readCSV() [][]string {
+	csvFile, err := os.Open("app/parser/sample-csv/sample.csv")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -35,16 +35,17 @@ func readCSV(file string) [][]string {
 	return records
 }
 
-func parse(file string) []byte {
+// Parse dato un path converte il CSV in JSON
+func Parse() []byte {
 	var obj Order
 	var report []Order
 
-	records := readCSV(file)
+	records := readCSV()
 	for _, rec := range records {
-		obj.ID, _ = strconv.Atoi(rec[0])
+		obj.ID = rec[0]
 		obj.Item = rec[1]
 		obj.User = rec[2]
-		obj.Qty, _ = strconv.Atoi(rec[3])
+		obj.Quantity, _ = strconv.Atoi(rec[3])
 		obj.City = rec[7]
 		obj.Department = rec[8]
 		obj.Price, _ = strconv.Atoi(rec[9])
@@ -60,7 +61,8 @@ func parse(file string) []byte {
 	return jsonData
 }
 
-func print(report []byte) {
+// Print dato un JSON ne stampa il contenuto in un file
+func Print(report []byte) {
 	jsonFile, err := os.Create("sample.json")
 	if err != nil {
 		fmt.Println(err)
