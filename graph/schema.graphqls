@@ -20,6 +20,19 @@ type Query {
     Report(id: ID!) : Report
 }
 
+type Mutation {
+    CreateOrder(order: InputOrder) : Order
+}
+
+input InputOrder {
+    item: String!
+    user: String!
+    quantity: Int!
+    city: String!
+    department: String!
+    price: Int!
+}
+
 # Custom schema
 
 scalar Time

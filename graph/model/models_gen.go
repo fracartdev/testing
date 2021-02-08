@@ -6,6 +6,15 @@ import (
 	"time"
 )
 
+type InputOrder struct {
+	Item       string `json:"item"`
+	User       string `json:"user"`
+	Quantity   int    `json:"quantity"`
+	City       string `json:"city"`
+	Department string `json:"department"`
+	Price      int    `json:"price"`
+}
+
 type Order struct {
 	ID         string `json:"id"`
 	Item       string `json:"item"`

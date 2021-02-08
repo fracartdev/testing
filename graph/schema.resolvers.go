@@ -6,30 +6,30 @@ package graph
 import (
 	"context"
 	"encoding/json"
-	"strconv"
+	"fmt"
 	"time"
 
+	api "github.com/fracartdev/testing/app/internal"
 	parserservice "github.com/fracartdev/testing/app/parser"
 	"github.com/fracartdev/testing/graph/generated"
 	"github.com/fracartdev/testing/graph/model"
 )
 
+func (r *mutationResolver) CreateOrder(ctx context.Context, order *model.InputOrder) (*model.Order, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) Order(ctx context.Context, id string) (*model.Order, error) {
-	var order []*model.Order
-	encJSON := parserservice.Parse()
-
-	err := json.Unmarshal(encJSON, &order)
-
-	idINT, _ := strconv.Atoi(id)
+	order, err := api.ReadOrder(id)
 
 	return &model.Order{
-		ID:         order[idINT].ID,
-		Item:       order[idINT].Item,
-		User:       order[idINT].User,
-		Quantity:   order[idINT].Quantity,
-		City:       order[idINT].City,
-		Department: order[idINT].Department,
-		Price:      order[idINT].Price,
+		ID:         order.ID,
+		Item:       order.Item,
+		User:       order.User,
+		Quantity:   order.Quantity,
+		City:       order.City,
+		Department: order.Department,
+		Price:      order.Price,
 	}, err
 }
 
@@ -47,7 +47,11 @@ func (r *queryResolver) Report(ctx context.Context, id string) (*model.Report, e
 	}, err
 }
 
+// Mutation returns generated.MutationResolver implementation.
+func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
